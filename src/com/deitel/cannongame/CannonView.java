@@ -406,9 +406,9 @@ public class CannonView extends SurfaceView
          {
             // alternate coloring the pieces yellow and blue
             if (i % 2 == 0)
-               targetPaint.setColor(Color.RED);
+               targetPaint.setColor(Color.YELLOW);
             else
-               targetPaint.setColor(Color.BLUE);
+               targetPaint.setColor(Color.GREEN);
             
             canvas.drawLine(currentPoint.x, currentPoint.y, target.end.x,
                (int) (currentPoint.y + pieceLength), targetPaint);
