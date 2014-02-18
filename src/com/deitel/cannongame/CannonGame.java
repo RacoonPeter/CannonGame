@@ -14,7 +14,7 @@ public class CannonGame extends Activity
    private GestureDetector gestureDetector; // listens for double taps
    private CannonView cannonView; // custom view to display the game
 
-   // called when the app first launches
+   // called when the app first laun
    @Override
    public void onCreate(Bundle savedInstanceState)
    {
