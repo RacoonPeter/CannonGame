@@ -28,14 +28,16 @@ public class CannonView extends SurfaceView
    private boolean dialogIsDisplayed = false;   
                
    // constants for game play
-   public static final int TARGET_PIECES = 7; // sections in the target
+   public static final int TARGET_PIECES = 1; // sections in the target
    public static final int MISS_PENALTY = 2; // seconds deducted on a miss
    public static final int HIT_REWARD = 3; // seconds added on a hit
+   private int numberOfReflections; //to be able to count ball reflections 
 
    // variables for the game loop and tracking statistics
    private boolean gameOver; // is the game over?
    private double timeLeft; // the amount of time left in seconds
    private int shotsFired; // the number of shots the user has fired
+   
    private double totalElapsedTime; // the number of seconds elapsed
 
    // variables for the blocker and target
@@ -142,7 +144,7 @@ public class CannonView extends SurfaceView
       cannonballRadius = w / 36; // cannonball radius 1/36 screen width
       cannonballSpeed = w * 2; // cannonball speed multiplier
 
-      lineWidth = w / 24; // target and blocker 1/24 screen width
+      lineWidth = w / 32; // target and blocker 1/24 screen width
 
       // configure instance variables related to the blocker
       
@@ -160,8 +162,8 @@ public class CannonView extends SurfaceView
       targetDistance = w * 7 / 8; // target 7/8 screen width from left
       targetBeginning = h / 8; // distance from top 1/8 screen height
       targetEnd = h * 7 / 8; // distance from top 7/8 screen height
-      pieceLength = (targetEnd - targetBeginning) / TARGET_PIECES;
-      initialTargetVelocity = -h / 4; // initial target speed multiplier
+      pieceLength = (targetEnd - targetBeginning) / 10; //TARGET_PIECES
+      initialTargetVelocity = -h / 2; // initial target speed multiplier
       target.start = new Point(targetDistance, targetBeginning);
       target.end = new Point(targetDistance, targetEnd);
 
@@ -183,6 +185,7 @@ public class CannonView extends SurfaceView
    // reset all the screen elements and start a new game
    public void newGame()
    {
+	  numberOfReflections = 0;
       // set every element of hitStates to false--restores target pieces
       for (int i = 0; i < TARGET_PIECES; ++i){
     	  hitStates[i] = false;
@@ -238,16 +241,19 @@ public class CannonView extends SurfaceView
          // check for collisions with left and right walls
          if (cannonball.x + cannonballRadius > screenWidth || 
             cannonball.x - cannonballRadius < 0)
-        	 cannonballVelocityX *= -1; // reverse cannonball's direction
+        	 {cannonballVelocityX *= -1; // reverse cannonball's direction
         	 //cannonballOnScreen = false; // remove cannonball from screen
-
+        	 numberOfReflections += 1;
+        	 soundPool.play(soundMap.get(CANNON_SOUND_ID), 1, 1, 1, 0, 1f);
+        	 }
          // check for collisions with top and bottom walls
          else if (cannonball.y + cannonballRadius > screenHeight || 
             cannonball.y - cannonballRadius < 0)
-        	 
-         {
-        	 cannonballVelocityY *= -1;
-         }
+	         {
+	        	 cannonballVelocityY *= -1;
+	        	 numberOfReflections += 1;
+	        	 soundPool.play(soundMap.get(CANNON_SOUND_ID), 1, 1, 1, 0, 1f);
+	         }
             //cannonballOnScreen = false; // make the cannonball disappear
 
          // check for cannonball collision with target
@@ -308,8 +314,8 @@ public class CannonView extends SurfaceView
       timeLeft -= interval; // subtract from time left
 
       // if the timer reached zero
-      if (timeLeft <= 0.0)
-      {
+      if (timeLeft <= 0.0 || numberOfReflections >= 10)
+      {  cannonballOnScreen = false;
          timeLeft = 0.0;
          gameOver = true; // the game is over
          cannonThread.setRunning(false);
