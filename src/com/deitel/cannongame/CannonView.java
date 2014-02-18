@@ -244,7 +244,11 @@ public class CannonView extends SurfaceView
          // check for collisions with top and bottom walls
          else if (cannonball.y + cannonballRadius > screenHeight || 
             cannonball.y - cannonballRadius < 0)
-            cannonballOnScreen = false; // make the cannonball disappear
+        	 
+         {
+        	 cannonballVelocityY *= -1;
+         }
+            //cannonballOnScreen = false; // make the cannonball disappear
 
          // check for cannonball collision with target
          else if (cannonball.x + cannonballRadius > targetDistance && 
