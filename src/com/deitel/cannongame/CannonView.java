@@ -417,7 +417,7 @@ public class CannonView extends SurfaceView
          // move curPoint to the start of the next piece
          currentPoint.y += pieceLength;
       } // end for
-   } // end method drawGameElements
+   } // end method drawGameElem  
 
    // display an AlertDialog when the game ends
    private void showGameOverDialog(int messageId)
