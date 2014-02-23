@@ -29,7 +29,7 @@ public class CannonView extends SurfaceView
                
    // constants for game play
    public static final int TARGET_PIECES = 1; // sections in the target
-   public static final int MISS_PENALTY = 2; // seconds deducted on a miss
+   public static final int MISS_PENALTY = 4; // seconds deducted on a miss
    public static final int HIT_REWARD = 3; // seconds added on a hit
    private int numberOfReflections; //to be able to count ball reflections 
 
