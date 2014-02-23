@@ -56,6 +56,8 @@ public class CannonView extends SurfaceView
    private double pieceLength; // length of a target piece
    private int targetEnd; // target bottom's distance from top
    private int initialTargetVelocity; // initial target speed multiplier
+   private int initialTargetVelocityX; // initial target speed multiplier
+   private int initialTargetVelocityY; // initial target speed multiplier
    private float targetVelocity; // target speed multiplier during game
 
    private int lineWidth; // width of the target and blocker
@@ -287,7 +289,7 @@ public class CannonView extends SurfaceView
                } // end if
             } // end if
          } // end else if
-      } // end if
+      } // end if cannon ball on screen
 
       // update the blocker's position
       
