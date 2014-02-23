@@ -19,6 +19,7 @@ import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
+import java.util.Random;
 
 public class CannonView extends SurfaceView 
    implements SurfaceHolder.Callback
@@ -56,9 +57,11 @@ public class CannonView extends SurfaceView
    private double pieceLength; // length of a target piece
    private int targetEnd; // target bottom's distance from top
    private int initialTargetVelocity; // initial target speed multiplier
-   private int initialTargetVelocityX; // initial target speed multiplier
-   private int initialTargetVelocityY; // initial target speed multiplier
-   private float targetVelocity; // target speed multiplier during game
+   //private int initialTargetVelocityX; // initial target speed multiplier
+   //private int initialTargetVelocityY; // initial target speed multiplier
+   private double targetVelocity; // target speed multiplier during game
+   private double targetVelocityX; // target speed multiplier during game
+   private double targetVelocityY; // target speed multiplier during game
 
    private int lineWidth; // width of the target and blocker
    private boolean[] hitStates; // is each target piece hit?
@@ -187,6 +190,8 @@ public class CannonView extends SurfaceView
    // reset all the screen elements and start a new game
    public void newGame()
    {
+	  double multiplierX;///////it suppose to be random value from 0 to 1
+	  double multiplierY;///////it suppose to be random value from 0 to 1
 	  numberOfReflections = 0;
       // set every element of hitStates to false--restores target pieces
       for (int i = 0; i < TARGET_PIECES; ++i){
@@ -195,6 +200,16 @@ public class CannonView extends SurfaceView
          
       targetPiecesHit = 0; // no target pieces have been hit
      // blockerVelocity = initialBlockerVelocity; // set initial velocity
+      Random rand = new Random();
+      
+      int randomNumberX = 3;///rand.nextInt(10);
+      int randomNumberY = 5;//rand.nextInt(10);
+      
+      multiplierX = randomNumberX/10;
+      multiplierY = randomNumberY/10;    
+      
+      targetVelocityX = initialTargetVelocity * 0.12;
+      targetVelocityY = initialTargetVelocity * 0.34;
       targetVelocity = initialTargetVelocity; // set initial velocity
       timeLeft = 100; // start the countdown at 100 seconds
       cannonballOnScreen = false; // the cannonball is not on the screen
@@ -299,9 +314,17 @@ public class CannonView extends SurfaceView
       blocker.end.y += blockerUpdate;
 */
       // update the target's position
-      double targetUpdate = interval * targetVelocity;
-      target.start.y += targetUpdate;
-      target.end.y += targetUpdate;
+      double targetUpdateX = interval * targetVelocityX;
+      double targetUpdateY = interval * targetVelocityY;
+     // double targetUpdate = interval * targetVelocityX;
+      
+      target.start.x += targetUpdateX;
+      target.start.y += targetUpdateY;
+      
+      //target.start.y += targetUpdate;
+     // target.end.y += targetUpdate;
+      target.end.x += targetUpdateX;
+      target.end.y += targetUpdateY;
 
       // if the blocker hit the top or bottom, reverse direction
       
@@ -310,8 +333,12 @@ public class CannonView extends SurfaceView
          blockerVelocity *= -1;
 */
       // if the target hit the top or bottom, reverse direction
-      if (target.start.y < 0 || target.end.y > screenHeight)
-         targetVelocity *= -1;
+      if (target.start.y < 0.00 || target.end.y > screenHeight){
+    	  targetVelocityY *= -1; 
+      }
+      if (target.start.x < 0.00 || target.end.x > screenWidth){
+    	  targetVelocityX *= -1; 
+      }   
 
       timeLeft -= interval; // subtract from time left
 
