@@ -319,6 +319,7 @@ public class CannonView extends SurfaceView
      // double targetUpdate = interval * targetVelocityX;
       
       target.start.x += targetUpdateX;
+      
       target.start.y += targetUpdateY;
       
       //target.start.y += targetUpdate;
