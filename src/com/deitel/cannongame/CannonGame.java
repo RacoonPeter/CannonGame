@@ -58,7 +58,7 @@ public class CannonGame extends Activity
       if (action == MotionEvent.ACTION_DOWN ||
          action == MotionEvent.ACTION_MOVE)
       {
-         cannonView.alignCannon(event); // align the cannon
+         //cannonView.alignCannon(event); // align the cannon
       } // end if
 
       // call the GestureDetector's onTouchEvent method
@@ -72,7 +72,7 @@ public class CannonGame extends Activity
       @Override
       public boolean onDoubleTap(MotionEvent e)
       {
-         cannonView.fireCannonball(e); // fire the cannonball
+         //cannonView.fireCannonball(e); // fire the cannonball
          return true; // the event was handled
       } // end method onDoubleTap
    }; // end gestureListener
