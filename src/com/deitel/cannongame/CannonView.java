@@ -211,7 +211,7 @@ public class CannonView extends SurfaceView
       targetVelocityX = initialTargetVelocity * 0.12;
       targetVelocityY = initialTargetVelocity * 0.34;
       targetVelocity = initialTargetVelocity; // set initial velocity
-      timeLeft = 100; // start the countdown at 100 seconds
+      timeLeft = 10; // start the countdown at 100 seconds
       cannonballOnScreen = false; // the cannonball is not on the screen
       shotsFired = 0; // set the initial number of shots fired
       totalElapsedTime = 0.0; // set the time elapsed to zero
