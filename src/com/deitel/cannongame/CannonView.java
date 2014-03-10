@@ -403,7 +403,7 @@ public class CannonView extends SurfaceView
                canvas = surfaceHolder.lockCanvas(null);               
                // lock the surfaceHolder for drawing
                synchronized(surfaceHolder)
-               {
+               {   
                   long currentTime = System.currentTimeMillis();
                   double elapsedTimeMS = currentTime - previousFrameTime;
                   totalElapsedTime += elapsedTimeMS / 1000.00; 
