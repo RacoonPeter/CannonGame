@@ -67,11 +67,6 @@ public class CannonView extends SurfaceView
    private boolean[] hitStates; // is each target piece hit?
    private int targetPiecesHit; // number of target pieces hit (out of 7)
 
-   // variables for the cannon and cannonball
-   private Point cannonball; // cannonball image's upper-left corner
-   private int cannonballVelocityX; // cannonball's x velocity
-   private int cannonballVelocityY; // cannonball's y velocity
-   private boolean cannonballOnScreen; // is the cannonball on the screen
    private int cannonballRadius; // cannonball radius
    private int cannonballSpeed; // cannonball speed
    private int cannonBaseRadius; // cannon base radius
@@ -89,8 +84,6 @@ public class CannonView extends SurfaceView
 
    // Paint variables used when drawing each item on the screen
    private Paint textPaint; // Paint used to draw text
-   private Paint cannonballPaint; // Paint used to draw the cannonball
-   private Paint cannonPaint; // Paint used to draw the cannon
    private Paint blockerPaint; // Paint used to draw the blocker
    private Paint targetPaint; // Paint used to draw the target
    private Paint backgroundPaint; // Paint used to clear the drawing area
@@ -107,8 +100,6 @@ public class CannonView extends SurfaceView
       // initialize Lines and points representing game items
       //blocker = new Line(); // create the blocker as a Line
       target = new Line(); // create the target as a Line
-      cannonball = new Point(); // create the cannonball as a point
-
       // initialize hitStates as a boolean array
       hitStates = new boolean[TARGET_PIECES];
 
@@ -151,18 +142,6 @@ public class CannonView extends SurfaceView
 
       lineWidth = w / 32; // target and blocker 1/24 screen width
 
-      // configure instance variables related to the blocker
-      
-      /*
-      blockerDistance = w * 5 / 8; // blocker 5/8 screen width from left
-      blockerBeginning = h / 8; // distance from top 1/8 screen height
-      blockerEnd = h * 3 / 8; // distance from top 3/8 screen height
-      initialBlockerVelocity = h / 2; // initial blocker speed multiplier
-      blocker.start = new Point(blockerDistance, blockerBeginning);
-      blocker.end = new Point(blockerDistance, blockerEnd);
-      */
-      
-      
       // configure instance variables related to the target
       targetDistance = w * 7 / 8; // target 7/8 screen width from left
       targetBeginning = h / 8; // distance from top 1/8 screen height
@@ -196,7 +175,7 @@ public class CannonView extends SurfaceView
       }
          
       targetPiecesHit = 0; // no target pieces have been hit
-     // blockerVelocity = initialBlockerVelocity; // set initial velocity
+
       Random rand = new Random();
       
       int randomNumberX = rand.nextInt(10);
@@ -207,13 +186,12 @@ public class CannonView extends SurfaceView
       
       targetVelocityX = initialTargetVelocity * multiplierX;
       targetVelocityY = initialTargetVelocity * multiplierY;
-      targetVelocity = initialTargetVelocity; // set initial velocity
+      
+ 
       timeLeft = 4; // start the countdown at 100 seconds
-      cannonballOnScreen = false; // the cannonball is not on the screen
+      //cannonballOnScreen = false; // the cannonball is not on the screen
       shotsFired = 0; // set the initial number of shots fired
       totalElapsedTime = 0.0; // set the time elapsed to zero
-      //blocker.start.set(blockerDistance, blockerBeginning);
-     // blocker.end.set(blockerDistance, blockerEnd);
       target.start.set(targetDistance, targetBeginning);
       target.end.set(targetDistance, targetEnd);
       
@@ -229,54 +207,10 @@ public class CannonView extends SurfaceView
    private void updatePositions(double elapsedTimeMS)
    {
       double interval = elapsedTimeMS / 1000.0; // convert to seconds
-
-      if (cannonballOnScreen) // if there is currently a shot fired
-      {
-         // update cannonball position
-         cannonball.x += interval * cannonballVelocityX;
-         cannonball.y += interval * cannonballVelocityY;
-         if (cannonball.x + cannonballRadius > screenWidth || 
-            cannonball.x - cannonballRadius < 0)
-        	 {cannonballVelocityX *= -1; // reverse cannonball's direction
-        	 //cannonballOnScreen = false; // remove cannonball from screen
-        	 numberOfReflections += 1;
-        	 soundPool.play(soundMap.get(CANNON_SOUND_ID), 1, 1, 1, 0, 1f);
-        	 }
-         else if (cannonball.y + cannonballRadius > screenHeight || 
-            cannonball.y - cannonballRadius < 0)
-	         {
-	        	 cannonballVelocityY *= -1;
-	        	 numberOfReflections += 1;
-	        	 soundPool.play(soundMap.get(CANNON_SOUND_ID), 1, 1, 1, 0, 1f);
-	         }
-         else if (cannonball.x + cannonballRadius > targetDistance && 
-            cannonball.x - cannonballRadius < targetDistance && 
-            cannonball.y + cannonballRadius > target.start.y &&
-            cannonball.y - cannonballRadius < target.end.y)
-         {
-            int section = 
-               (int) ((cannonball.y - target.start.y) / pieceLength);
-            
-            if ((section >= 0 && section < TARGET_PIECES) && 
-               !hitStates[section])
-            {
-               hitStates[section] = true; // section was hit
-               cannonballOnScreen = false; // remove cannonball
-               timeLeft += HIT_REWARD; // add reward to remaining time
-               soundPool.play(soundMap.get(TARGET_SOUND_ID), 1,
-                  1, 1, 0, 1f);
-               if (++targetPiecesHit == TARGET_PIECES)
-               {
-                  cannonThread.setRunning(false);
-                  showGameOverDialog(R.string.win); // show winning dialog
-                  gameOver = true; // the game is over
-               } // end if
-            } // end if
-         } // end else if
-      } // end if cannon ball on screen
-
-    double targetUpdateX = interval * targetVelocityX;
+      
+      double targetUpdateX = interval * targetVelocityX;
       double targetUpdateY = interval * targetVelocityY;
+      
       target.start.x += targetUpdateX;
       target.start.y += targetUpdateY;
       target.end.x += targetUpdateX;
@@ -290,8 +224,7 @@ public class CannonView extends SurfaceView
 
       timeLeft -= interval; // subtract from time left
       if (timeLeft <= 0.0 || numberOfReflections >= 10)
-      {  cannonballOnScreen = false;
-         timeLeft = 0.0;
+      {  timeLeft = 0.0;
          gameOver = true; // the game is over
          cannonThread.setRunning(false);
          showGameOverDialog(R.string.lose); // show the losing dialog
@@ -307,7 +240,7 @@ public class CannonView extends SurfaceView
    public void alignCannon(MotionEvent event)
    {
 	   
-   } // end method alignCannon
+   } 
 
    // draws the game to the given Canvas
    public void drawGameElements(Canvas canvas)
@@ -320,10 +253,7 @@ public class CannonView extends SurfaceView
       canvas.drawText(getResources().getString(
          R.string.time_remaining_format, timeLeft), 30, 50, textPaint);
 
-      // if a cannonball is currently on the screen, draw it
-      if (cannonballOnScreen)
-         canvas.drawCircle(cannonball.x, cannonball.y, cannonballRadius,
-            cannonballPaint);
+
       Point currentPoint = new Point(); // start of current target section
 
       // initialize curPoint to the starting point of the target
@@ -492,15 +422,3 @@ public class CannonView extends SurfaceView
    } // end nested class CannonThread
 } // end class CannonView
 
-/*********************************************************************************
- * (C) Copyright 1992-2012 by Deitel & Associates, Inc. and * Pearson Education, *
- * Inc. All Rights Reserved. * * DISCLAIMER: The authors and publisher of this   *
- * book have used their * best efforts in preparing the book. These efforts      *
- * include the * development, research, and testing of the theories and programs *
- * * to determine their effectiveness. The authors and publisher make * no       *
- * warranty of any kind, expressed or implied, with regard to these * programs   *
- * or to the documentation contained in these books. The authors * and publisher *
- * shall not be liable in any event for incidental or * consequential damages in *
- * connection with, or arising out of, the * furnishing, performance, or use of  *
- * these programs.                                                               *
- *********************************************************************************/

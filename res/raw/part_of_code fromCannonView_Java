@@ -1,0 +1,46 @@
+      ////this is from ..... private void updatePositions(double elapsedTimeMS)..... method after ..... double interval = elapsedTimeMS / 1000.0; // convert to seconds 
+      /*
+      if (cannonballOnScreen) // if there is currently a shot fired
+      {
+         cannonball.x += interval * cannonballVelocityX;
+         cannonball.y += interval * cannonballVelocityY;
+         if (cannonball.x + cannonballRadius > screenWidth || 
+            cannonball.x - cannonballRadius < 0)
+        	 {cannonballVelocityX *= -1; // reverse cannonball's direction
+        	 //cannonballOnScreen = false; // remove cannonball from screen
+        	 numberOfReflections += 1;
+        	 soundPool.play(soundMap.get(CANNON_SOUND_ID), 1, 1, 1, 0, 1f);
+        	 }
+         else if (cannonball.y + cannonballRadius > screenHeight || 
+            cannonball.y - cannonballRadius < 0)
+	         {
+	        	 cannonballVelocityY *= -1;
+	        	 numberOfReflections += 1;
+	        	 soundPool.play(soundMap.get(CANNON_SOUND_ID), 1, 1, 1, 0, 1f);
+	         }
+         else if (cannonball.x + cannonballRadius > targetDistance && 
+            cannonball.x - cannonballRadius < targetDistance && 
+            cannonball.y + cannonballRadius > target.start.y &&
+            cannonball.y - cannonballRadius < target.end.y)
+         {
+            int section = 
+               (int) ((cannonball.y - target.start.y) / pieceLength);
+            
+            if ((section >= 0 && section < TARGET_PIECES) && 
+               !hitStates[section])
+            {
+               hitStates[section] = true; // section was hit
+               cannonballOnScreen = false; // remove cannonball
+               timeLeft += HIT_REWARD; // add reward to remaining time
+               soundPool.play(soundMap.get(TARGET_SOUND_ID), 1,
+                  1, 1, 0, 1f);
+               if (++targetPiecesHit == TARGET_PIECES)
+               {
+                  cannonThread.setRunning(false);
+                  showGameOverDialog(R.string.win); // show winning dialog
+                  gameOver = true; // the game is over
+               } // end if
+            } // end if
+         } // end else if
+      } // end if cannon ball on screen
+       */
