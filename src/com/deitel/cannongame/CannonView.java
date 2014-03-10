@@ -29,7 +29,7 @@ public class CannonView extends SurfaceView
    private boolean dialogIsDisplayed = false;   
                
    // constants for game play
-   public static final int TARGET_PIECES = 7; // sections in the target
+   public static final int TARGET_PIECES = 1; // sections in the target
    public static final int MISS_PENALTY = 4; // seconds deducted on a miss
    public static final int HIT_REWARD = 3; // seconds added on a hit
    private int numberOfReflections; //to be able to count ball reflections 
@@ -40,17 +40,6 @@ public class CannonView extends SurfaceView
    private int shotsFired; // the number of shots the user has fired
    
    private double totalElapsedTime; // the number of seconds elapsed
-
-   // variables for the blocker and target
-   /*
-   private Line blocker; // start and end points of the blocker
-   private int blockerDistance; // blocker distance from left
-   private int blockerBeginning; // blocker distance from top
-   private int blockerEnd; // blocker bottom edge distance from top
-   private int initialBlockerVelocity; // initial blocker speed multiplier
-   private float blockerVelocity; // blocker speed multiplier during game
-   */
-   
    private Line target; // start and end points of the target
    private int targetDistance; // target distance from left
    private int targetBeginning; // target distance from top
@@ -118,9 +107,10 @@ public class CannonView extends SurfaceView
       lineWidth = w / 32; // target and blocker 1/24 screen width
       targetDistance = w * 7 / 8; // target 7/8 screen width from left
       targetBeginning = h / 8; // distance from top 1/8 screen height
-      targetEnd = h * 7 / 8; // distance from top 7/8 screen height
-      pieceLength = (targetEnd - targetBeginning) / 10; //TARGET_PIECES
-      initialTargetVelocity = -h / 2; // initial target speed multiplier
+      //targetEnd = targetBeginning + h / 8;
+      targetEnd = h * 2 / 8; // distance from top 7/8 screen height
+      pieceLength = (targetEnd - targetBeginning) ; //TARGET_PIECES
+      initialTargetVelocity = h/2; // initial target speed multiplier
       target.start = new Point(targetDistance, targetBeginning);
       target.end = new Point(targetDistance, targetEnd);
       textPaint.setTextSize(w / 20); // text size 1/20 of screen width
@@ -155,7 +145,7 @@ public class CannonView extends SurfaceView
       targetVelocityY = initialTargetVelocity * multiplierY;
       
  
-      timeLeft = 4; // start the countdown at 100 seconds
+      timeLeft = 10; // start the countdown at 100 seconds
       //cannonballOnScreen = false; // the cannonball is not on the screen
       shotsFired = 0; // set the initial number of shots fired
       totalElapsedTime = 0.0; // set the time elapsed to zero
@@ -183,14 +173,16 @@ public class CannonView extends SurfaceView
       target.end.x += targetUpdateX;
       target.end.y += targetUpdateY;
       if (target.start.y < 0.00 || target.end.y > screenHeight){
-    	  targetVelocityY *= -1; 
+    	  targetVelocityY *= -1;
+    	  numberOfReflections += 1;
       }
       if (target.start.x < 0.00 || target.end.x > screenWidth){
     	  targetVelocityX *= -1; 
+    	  numberOfReflections += 1;
       }   
 
       timeLeft -= interval; // subtract from time left
-      if (timeLeft <= 0.0 || numberOfReflections >= 10)
+      if (timeLeft <= 0.0 || numberOfReflections >= 2)
       {  timeLeft = 0.0;
          gameOver = true; // the game is over
          cannonThread.setRunning(false);
