@@ -5,6 +5,7 @@ package com.deitel.cannongame;
 import java.util.HashMap;
 import java.util.Map;
 
+import android.R.string;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
@@ -64,6 +65,7 @@ public class CannonView extends SurfaceView
 
    // Paint variables used when drawing each item on the screen
    private Paint textPaint; // Paint used to draw text
+   private Paint textPaintReflections; // Paint used to draw text
    private Paint targetPaint; // Paint used to draw the target
    private Paint backgroundPaint; // Paint used to clear the drawing area
 
@@ -91,6 +93,7 @@ public class CannonView extends SurfaceView
       soundMap.put(BLOCKER_SOUND_ID,
          soundPool.load(context, R.raw.blocker_hit, 1));
       textPaint = new Paint(); // Paint for drawing text
+      textPaintReflections = new Paint(); // Paint for drawing text
       targetPaint = new Paint(); // Paint for drawing the target
       backgroundPaint = new Paint(); // Paint for drawing the target background
    } // end CannonView constructor
@@ -115,9 +118,14 @@ public class CannonView extends SurfaceView
       target.end = new Point(targetDistance, targetEnd);
       textPaint.setTextSize(w / 20); // text size 1/20 of screen width
       textPaint.setAntiAlias(true); // smoothes the text
+      textPaint.setColor(Color.RED);// set background color
+      
+      textPaintReflections.setTextSize(w / 30); // text size 1/20 of screen width
+      textPaintReflections.setAntiAlias(true); // smoothes the text
+      textPaintReflections.setColor(Color.YELLOW);// set background color
+      
       targetPaint.setStrokeWidth(lineWidth); // set line thickness       
       backgroundPaint.setColor(Color.GRAY); 
-      textPaint.setColor(Color.RED);// set background color
 
       newGame(); // set up and start a new game
    } // end method onSizeChanged
@@ -182,7 +190,7 @@ public class CannonView extends SurfaceView
       }   
 
       timeLeft -= interval; // subtract from time left
-      if (timeLeft <= 0.0 || numberOfReflections >= 2)
+      if (timeLeft <= 0.0 || numberOfReflections >= 20)
       {  timeLeft = 0.0;
          gameOver = true; // the game is over
          cannonThread.setRunning(false);
@@ -204,6 +212,8 @@ public class CannonView extends SurfaceView
    // draws the game to the given Canvas
    public void drawGameElements(Canvas canvas)
    {
+	   String testString = String.valueOf(numberOfReflections);
+	  // Reflectionsss = "fsdfgsdf";
       // clear the background
       canvas.drawRect(0, 0, canvas.getWidth(), canvas.getHeight(), 
          backgroundPaint);
@@ -211,6 +221,7 @@ public class CannonView extends SurfaceView
       // display time remaining
       canvas.drawText(getResources().getString(
          R.string.time_remaining_format, timeLeft), 30, 50, textPaint);
+      canvas.drawText(testString, 30, 90, textPaintReflections);      
 
 
       Point currentPoint = new Point(); // start of current target section
