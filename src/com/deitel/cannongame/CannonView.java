@@ -29,7 +29,7 @@ public class CannonView extends SurfaceView
    private boolean dialogIsDisplayed = false;   
                
    // constants for game play
-   public static final int TARGET_PIECES = 1; // sections in the target
+   public static final int TARGET_PIECES = 7; // sections in the target
    public static final int MISS_PENALTY = 4; // seconds deducted on a miss
    public static final int HIT_REWARD = 3; // seconds added on a hit
    private int numberOfReflections; //to be able to count ball reflections 
@@ -57,21 +57,12 @@ public class CannonView extends SurfaceView
    private double pieceLength; // length of a target piece
    private int targetEnd; // target bottom's distance from top
    private int initialTargetVelocity; // initial target speed multiplier
-   //private int initialTargetVelocityX; // initial target speed multiplier
-   //private int initialTargetVelocityY; // initial target speed multiplier
-   private double targetVelocity; // target speed multiplier during game
    private double targetVelocityX; // target speed multiplier during game
    private double targetVelocityY; // target speed multiplier during game
 
    private int lineWidth; // width of the target and blocker
    private boolean[] hitStates; // is each target piece hit?
    private int targetPiecesHit; // number of target pieces hit (out of 7)
-
-   private int cannonballRadius; // cannonball radius
-   private int cannonballSpeed; // cannonball speed
-   private int cannonBaseRadius; // cannon base radius
-   private int cannonLength; // cannon barrel length
-   private Point barrelEnd; // the endpoint of the cannon's barrel
    private int screenWidth; // width of the screen
    private int screenHeight; // height of the screen
 
@@ -84,7 +75,6 @@ public class CannonView extends SurfaceView
 
    // Paint variables used when drawing each item on the screen
    private Paint textPaint; // Paint used to draw text
-   private Paint blockerPaint; // Paint used to draw the blocker
    private Paint targetPaint; // Paint used to draw the target
    private Paint backgroundPaint; // Paint used to clear the drawing area
 
@@ -96,9 +86,6 @@ public class CannonView extends SurfaceView
       
       // register SurfaceHolder.Callback listener
       getHolder().addCallback(this); 
-
-      // initialize Lines and points representing game items
-      //blocker = new Line(); // create the blocker as a Line
       target = new Line(); // create the target as a Line
       // initialize hitStates as a boolean array
       hitStates = new boolean[TARGET_PIECES];
@@ -114,13 +101,7 @@ public class CannonView extends SurfaceView
          soundPool.load(context, R.raw.cannon_fire, 1));
       soundMap.put(BLOCKER_SOUND_ID,
          soundPool.load(context, R.raw.blocker_hit, 1));
-
-      // construct Paints for drawing text, cannonball, cannon,
-      // blocker and target; these are configured in method onSizeChanged
       textPaint = new Paint(); // Paint for drawing text
-      //cannonPaint = new Paint(); // Paint for drawing the cannon
-      //cannonballPaint = new Paint(); // Paint for drawing a cannonball
-      blockerPaint = new Paint(); // Paint for drawing the blocker
       targetPaint = new Paint(); // Paint for drawing the target
       backgroundPaint = new Paint(); // Paint for drawing the target background
    } // end CannonView constructor
@@ -134,15 +115,7 @@ public class CannonView extends SurfaceView
 
       screenWidth = w; // store the width
       screenHeight = h; // store the height
-      cannonBaseRadius = h / 30; // cannon base radius 1/18 screen height
-      cannonLength = w / 4; // cannon length 1/8 screen width
-
-      cannonballRadius = w / 36; // cannonball radius 1/36 screen width
-      cannonballSpeed = w * 2; // cannonball speed multiplier
-
       lineWidth = w / 32; // target and blocker 1/24 screen width
-
-      // configure instance variables related to the target
       targetDistance = w * 7 / 8; // target 7/8 screen width from left
       targetBeginning = h / 8; // distance from top 1/8 screen height
       targetEnd = h * 7 / 8; // distance from top 7/8 screen height
@@ -150,14 +123,8 @@ public class CannonView extends SurfaceView
       initialTargetVelocity = -h / 2; // initial target speed multiplier
       target.start = new Point(targetDistance, targetBeginning);
       target.end = new Point(targetDistance, targetEnd);
-
-      // endpoint of the cannon's barrel initially points horizontally
-      barrelEnd = new Point(cannonLength, h / 2);
-
-      // configure Paint objects for drawing game elements
       textPaint.setTextSize(w / 20); // text size 1/20 of screen width
       textPaint.setAntiAlias(true); // smoothes the text
-      blockerPaint.setStrokeWidth(lineWidth); // set line thickness      
       targetPaint.setStrokeWidth(lineWidth); // set line thickness       
       backgroundPaint.setColor(Color.GRAY); 
       textPaint.setColor(Color.RED);// set background color

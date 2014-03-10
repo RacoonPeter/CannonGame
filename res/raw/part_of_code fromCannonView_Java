@@ -1,6 +1,6 @@
       ////this is from ..... private void updatePositions(double elapsedTimeMS)..... method after ..... double interval = elapsedTimeMS / 1000.0; // convert to seconds 
       /*
-      if (cannonballOnScreen) // if there is currently a shot fired
+      if (cannonballOnScreen) // if there is currently a shot fired  
       {
          cannonball.x += interval * cannonballVelocityX;
          cannonball.y += interval * cannonballVelocityY;

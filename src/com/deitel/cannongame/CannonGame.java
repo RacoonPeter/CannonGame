@@ -19,7 +19,7 @@ public class CannonGame extends Activity
    public void onCreate(Bundle savedInstanceState)
    {
       super.onCreate(savedInstanceState); // call super's onCreate method
-      setContentView(R.layout.main); // inflate the layout
+      setContentView(R.layout.main); // inflate the layout  
 
       // get the CannonView
       cannonView = (CannonView) findViewById(R.id.cannonView);
