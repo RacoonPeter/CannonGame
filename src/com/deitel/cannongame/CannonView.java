@@ -138,8 +138,7 @@ public class CannonView extends SurfaceView
     	  hitStates[i] = false;
       }
          
-      targetPiecesHit = 0; // no target pieces have been hit
-
+ 
       Random rand = new Random();
       
       int randomNumberX = rand.nextInt(10);
