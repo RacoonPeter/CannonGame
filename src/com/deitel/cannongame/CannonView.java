@@ -44,14 +44,12 @@ public class CannonView extends SurfaceView
    private Line target; // start and end points of the target
    private int targetDistance; // target distance from left
    private int targetBeginning; // target distance from top
-   private double targetHeight; // length of a target piece
    private int targetEnd; // target bottom's distance from top
    private int initialTargetVelocity; // initial target speed multiplier
    private double targetVelocityX; // target speed multiplier during game
    private double targetVelocityY; // target speed multiplier during game
 
    private int lineWidth; // width of the target and blocker
-   private boolean[] hitStates; // is each target piece hit?
    private int screenWidth; // width of the screen
    private int screenHeight; // height of the screen
 
@@ -77,9 +75,6 @@ public class CannonView extends SurfaceView
       // register SurfaceHolder.Callback listener
       getHolder().addCallback(this); 
       target = new Line(); // create the target as a Line
-      // initialize hitStates as a boolean array
-      hitStates = new boolean[TARGET_PIECES];
-
       // initialize SoundPool to play the app's three sound effects
       soundPool = new SoundPool(1, AudioManager.STREAM_MUSIC, 0);
 
@@ -109,10 +104,8 @@ public class CannonView extends SurfaceView
       lineWidth = w / 32; // target and blocker 1/24 screen width
       targetDistance = w * 7 / 8; // target 7/8 screen width from left
       targetBeginning = h / 8; // distance from top 1/8 screen height
-      //targetEnd = targetBeginning + h / 8;
-      targetEnd = h * 2 / 8; // distance from top 7/8 screen height
-      targetHeight =  h / 32 ; //TARGET_height targetHeight
-      initialTargetVelocity = h/2; // initial target speed multiplier
+      targetEnd = h * 5 / 32; 
+      initialTargetVelocity = h/2; // initial target speed 
       target.start = new Point(targetDistance, targetBeginning);
       target.end = new Point(targetDistance, targetEnd);
       textPaint.setTextSize(w / 20); // text size 1/20 of screen width
@@ -134,10 +127,6 @@ public class CannonView extends SurfaceView
    {
 	  numberOfReflections = 0;
       // set every element of hitStates to false--restores target pieces
-      for (int i = 0; i < TARGET_PIECES; ++i){
-    	  hitStates[i] = false;
-      }
-         
  
       Random rand = new Random();
       
@@ -155,6 +144,7 @@ public class CannonView extends SurfaceView
       //cannonballOnScreen = false; // the cannonball is not on the screen
       shotsFired = 0; // set the initial number of shots fired
       totalElapsedTime = 0.0; // set the time elapsed to zero
+      
       target.start.set(targetDistance, targetBeginning);
       target.end.set(targetDistance, targetEnd);
       
@@ -221,12 +211,8 @@ public class CannonView extends SurfaceView
       canvas.drawText(testString, 30, 90, textPaintReflections);      
 
 
-      Point currentPoint = new Point(); // start of current target section
-
-      currentPoint.x = target.start.x;
-      currentPoint.y = target.start.y;
       targetPaint.setColor(Color.BLUE);
-      canvas.drawLine(currentPoint.x, currentPoint.y, target.end.x, (int) (currentPoint.y + targetHeight), targetPaint);
+      canvas.drawLine(target.start.x, target.start.y, target.end.x, target.end.y, targetPaint);
     }
 
    // display an AlertDialog when the game ends
