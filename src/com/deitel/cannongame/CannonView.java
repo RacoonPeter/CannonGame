@@ -29,10 +29,6 @@ public class CannonView extends SurfaceView
    private Activity activity; // to display Game Over dialog in GUI thread
    private boolean dialogIsDisplayed = false;   
                
-   // constants for game play
-   public static final int TARGET_PIECES = 1; // sections in the target
-   public static final int MISS_PENALTY = 4; // seconds deducted on a miss
-   public static final int HIT_REWARD = 3; // seconds added on a hit
    private int numberOfReflections; //to be able to count ball reflections 
 
    // variables for the game loop and tracking statistics
@@ -113,11 +109,8 @@ public class CannonView extends SurfaceView
       textPaint.setColor(Color.RED);// set background color
       
       textPaintReflections.setTextSize(w / 30); // text size 1/20 of screen width
-      textPaintReflections.setAntiAlias(true); // smoothes the text
-      textPaintReflections.setColor(Color.YELLOW);// set background color
-      
-      targetPaint.setStrokeWidth(lineWidth); // set line thickness       
-      backgroundPaint.setColor(Color.GRAY); 
+
+
 
       newGame(); // set up and start a new game
    } // end method onSizeChanged
@@ -125,6 +118,11 @@ public class CannonView extends SurfaceView
    // reset all the screen elements and start a new game
    public void newGame()
    {
+      textPaintReflections.setColor(Color.YELLOW);// set background color
+      textPaintReflections.setAntiAlias(true); // smoothes the text
+      targetPaint.setStrokeWidth(lineWidth); // set line thickness       
+      backgroundPaint.setColor(Color.GRAY); 
+	   
 	  numberOfReflections = 0;
       // set every element of hitStates to false--restores target pieces
  
@@ -132,10 +130,15 @@ public class CannonView extends SurfaceView
       
       int randomNumberX = rand.nextInt(10);
       int randomNumberY = rand.nextInt(10);
+  	  int randomNumberAngle = rand.nextInt(360);
+  	  //cannonballVelocityX = (int) (cannonballSpeed * Math.sin(angle)); 
+  	  
       
-      double multiplierX = randomNumberX/10.00;
-      double multiplierY = randomNumberY/10.00;    
-      
+      //double multiplierX = randomNumberX/10.00;
+      //double multiplierY = randomNumberY/10.00;    
+  	  double multiplierX = Math.sin(randomNumberAngle);
+  	  double multiplierY = Math.cos(randomNumberAngle);
+  	  
       targetVelocityX = initialTargetVelocity * multiplierX;
       targetVelocityY = initialTargetVelocity * multiplierY;
       
@@ -207,7 +210,7 @@ public class CannonView extends SurfaceView
       
       // display time remaining
       canvas.drawText(getResources().getString(
-         R.string.time_remaining_format, timeLeft), 30, 50, textPaint);
+      R.string.time_remaining_format, timeLeft), 30, 50, textPaint);
       canvas.drawText(testString, 30, 90, textPaintReflections);      
 
 
