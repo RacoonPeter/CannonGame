@@ -44,7 +44,7 @@ public class CannonView extends SurfaceView
    private Line target; // start and end points of the target
    private int targetDistance; // target distance from left
    private int targetBeginning; // target distance from top
-   private double pieceLength; // length of a target piece
+   private double targetHeight; // length of a target piece
    private int targetEnd; // target bottom's distance from top
    private int initialTargetVelocity; // initial target speed multiplier
    private double targetVelocityX; // target speed multiplier during game
@@ -52,7 +52,6 @@ public class CannonView extends SurfaceView
 
    private int lineWidth; // width of the target and blocker
    private boolean[] hitStates; // is each target piece hit?
-   private int targetPiecesHit; // number of target pieces hit (out of 7)
    private int screenWidth; // width of the screen
    private int screenHeight; // height of the screen
 
@@ -112,7 +111,7 @@ public class CannonView extends SurfaceView
       targetBeginning = h / 8; // distance from top 1/8 screen height
       //targetEnd = targetBeginning + h / 8;
       targetEnd = h * 2 / 8; // distance from top 7/8 screen height
-      pieceLength = (targetEnd - targetBeginning) ; //TARGET_PIECES
+      targetHeight =  h / 32 ; //TARGET_height targetHeight
       initialTargetVelocity = h/2; // initial target speed multiplier
       target.start = new Point(targetDistance, targetBeginning);
       target.end = new Point(targetDistance, targetEnd);
@@ -190,7 +189,7 @@ public class CannonView extends SurfaceView
       }   
 
       timeLeft -= interval; // subtract from time left
-      if (timeLeft <= 0.0 || numberOfReflections >= 20)
+      if (timeLeft <= 0.0 || numberOfReflections >= 10)
       {  timeLeft = 0.0;
          gameOver = true; // the game is over
          cannonThread.setRunning(false);
@@ -213,7 +212,6 @@ public class CannonView extends SurfaceView
    public void drawGameElements(Canvas canvas)
    {
 	   String testString = String.valueOf(numberOfReflections);
-	  // Reflectionsss = "fsdfgsdf";
       // clear the background
       canvas.drawRect(0, 0, canvas.getWidth(), canvas.getHeight(), 
          backgroundPaint);
@@ -226,30 +224,11 @@ public class CannonView extends SurfaceView
 
       Point currentPoint = new Point(); // start of current target section
 
-      // initialize curPoint to the starting point of the target
       currentPoint.x = target.start.x;
       currentPoint.y = target.start.y;
-
-      // draw the target
-      for (int i = 1; i <= TARGET_PIECES; ++i)
-      {
-         // if this target piece is not hit, draw it
-         if (!hitStates[i - 1])
-         {
-            // alternate coloring the pieces yellow and blue
-            if (i % 2 == 0)
-               targetPaint.setColor(Color.RED);
-            else
-               targetPaint.setColor(Color.BLUE);
-            
-            canvas.drawLine(currentPoint.x, currentPoint.y, target.end.x,
-               (int) (currentPoint.y + pieceLength), targetPaint);
-         } // end if
-         
-         // move curPoint to the start of the next piece
-         currentPoint.y += pieceLength;
-      } // end for
-   } // end method drawGameElem  
+      targetPaint.setColor(Color.BLUE);
+      canvas.drawLine(currentPoint.x, currentPoint.y, target.end.x, (int) (currentPoint.y + targetHeight), targetPaint);
+    }
 
    // display an AlertDialog when the game ends
    private void showGameOverDialog(int messageId)
