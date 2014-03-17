@@ -128,14 +128,7 @@ public class CannonView extends SurfaceView
  
       Random rand = new Random();
       
-      int randomNumberX = rand.nextInt(10);
-      int randomNumberY = rand.nextInt(10);
   	  int randomNumberAngle = rand.nextInt(360);
-  	  //cannonballVelocityX = (int) (cannonballSpeed * Math.sin(angle)); 
-  	  
-      
-      //double multiplierX = randomNumberX/10.00;
-      //double multiplierY = randomNumberY/10.00;    
   	  double multiplierX = Math.sin(randomNumberAngle);
   	  double multiplierY = Math.cos(randomNumberAngle);
   	  
@@ -143,8 +136,7 @@ public class CannonView extends SurfaceView
       targetVelocityY = initialTargetVelocity * multiplierY;
       
  
-      timeLeft = 10; // start the countdown at 100 seconds
-      //cannonballOnScreen = false; // the cannonball is not on the screen
+      timeLeft = 10; 
       shotsFired = 0; // set the initial number of shots fired
       totalElapsedTime = 0.0; // set the time elapsed to zero
       
@@ -157,9 +149,8 @@ public class CannonView extends SurfaceView
          cannonThread = new CannonThread(getHolder());
          cannonThread.start();
       } // end if
-   } // end method newGame
+   } 
 
-   // called repeatedly by the CannonThread to update game elements
    private void updatePositions(double elapsedTimeMS)
    {
       double interval = elapsedTimeMS / 1000.0; // convert to seconds
@@ -218,7 +209,6 @@ public class CannonView extends SurfaceView
       canvas.drawLine(target.start.x, target.start.y, target.end.x, target.end.y, targetPaint);
     }
 
-   // display an AlertDialog when the game ends
    private void showGameOverDialog(int messageId)
    {
       // create a dialog displaying the given String
