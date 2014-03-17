@@ -155,7 +155,7 @@ public class CannonView extends SurfaceView
       } // end if
    } 
 
-   private void updatePositions(double elapsedTimeMS)
+   private void updatePositions(double elapsedTimeMS)  
    {
       double interval = elapsedTimeMS / 1000.0; // convert to seconds
       
