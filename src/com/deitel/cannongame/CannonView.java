@@ -181,7 +181,7 @@ public class CannonView extends SurfaceView
     	  numberOfReflections += 1;
       }
       if (target.start.x < 0.00 || target.end.x > screenWidth){
-    	  targetVelocityX *= -1; 
+    	  targetVelocityX *= -1;   
     	  numberOfReflections += 1;
       }   
 
