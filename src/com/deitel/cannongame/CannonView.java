@@ -39,7 +39,7 @@ public class CannonView extends SurfaceView
    private double totalElapsedTime; // the number of seconds elapsed
    private Line target; // start and end points of the target
    private int targetDistance; // target distance from left
-   private int andgleDiapason = 40; // target distance from left
+   private int andgleDiapason = 10; // target distance from left
    int randomNumberAngle;//// start target angle of the new game
    private int targetBeginning; // target distance from top
    private int targetEnd; // target bottom's distance from top
@@ -100,7 +100,7 @@ public class CannonView extends SurfaceView
       screenWidth = w; // store the width
       screenHeight = h; // store the height
       lineWidth = w / 32; // target and blocker 1/24 screen width
-      targetDistance = w * 7 / 8; // target 7/8 screen width from left
+      targetDistance = w  / 2; // target 7/8 screen width from left
       targetBeginning = h / 8; // distance from top 1/8 screen height
       targetEnd = h * 5 / 32; 
       initialTargetVelocity = h/2; // initial target speed 
@@ -172,6 +172,8 @@ public class CannonView extends SurfaceView
       double targetUpdateX = interval * targetVelocityX;
       double targetUpdateY = interval * targetVelocityY;
       
+      
+      
       target.start.x += targetUpdateX;
       target.start.y += targetUpdateY;
       target.end.x += targetUpdateX;
@@ -186,7 +188,7 @@ public class CannonView extends SurfaceView
       }   
 
       timeLeft -= interval; // subtract from time left
-      if (timeLeft <= 0.0 || numberOfReflections >= 10)
+      if (timeLeft <= 0.0 || numberOfReflections >= 100000)
       {  timeLeft = 0.0;
          gameOver = true; // the game is over
          cannonThread.setRunning(false);
