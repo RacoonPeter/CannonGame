@@ -39,6 +39,8 @@ public class CannonView extends SurfaceView
    private double totalElapsedTime; // the number of seconds elapsed
    private Line target; // start and end points of the target
    private int targetDistance; // target distance from left
+   private int andgleDiapason = 40; // target distance from left
+   int randomNumberAngle;//// start target angle of the new game
    private int targetBeginning; // target distance from top
    private int targetEnd; // target bottom's distance from top
    private int initialTargetVelocity; // initial target speed multiplier
@@ -128,13 +130,15 @@ public class CannonView extends SurfaceView
  
       Random rand = new Random();
       
-  	  int randomNumberAngle = rand.nextInt(360);
+      randomNumberAngle = rand.nextInt(360);
+      
+  	  /*
   	  double multiplierX = Math.sin(randomNumberAngle);
   	  double multiplierY = Math.cos(randomNumberAngle);
   	  
       targetVelocityX = initialTargetVelocity * multiplierX;
       targetVelocityY = initialTargetVelocity * multiplierY;
-      
+      */
  
       timeLeft = 10; 
       shotsFired = 0; // set the initial number of shots fired
@@ -154,6 +158,16 @@ public class CannonView extends SurfaceView
    private void updatePositions(double elapsedTimeMS)
    {
       double interval = elapsedTimeMS / 1000.0; // convert to seconds
+      
+      Random randSmallAngle = new Random();
+      int randomNumberSmallAnglePositive = randSmallAngle.nextInt(andgleDiapason);
+      int randomNumberSmallAngleNegative = randomNumberSmallAnglePositive -  (andgleDiapason / 2);
+      
+  	  double multiplierX = Math.sin(randomNumberAngle + randomNumberSmallAngleNegative);
+  	  double multiplierY = Math.cos(randomNumberAngle + randomNumberSmallAngleNegative);
+  	  
+      targetVelocityX = initialTargetVelocity * multiplierX;
+      targetVelocityY = initialTargetVelocity * multiplierY;     
       
       double targetUpdateX = interval * targetVelocityX;
       double targetUpdateY = interval * targetVelocityY;
