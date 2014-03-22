@@ -40,7 +40,7 @@ public class CannonView extends SurfaceView
    private Line target; // start and end points of the target
    private int targetDistance; // target distance from left
    private int andgleDiapason; // target distance from left
-   int randomNumberAngle;//// start target angle of the new game
+   int mainAngle;//// start target angle of the new game
    private int targetBeginning; // target distance from top
    private int targetEnd; // target bottom's distance from top
    private int initialTargetVelocity; // initial target speed multiplier
@@ -103,7 +103,7 @@ public class CannonView extends SurfaceView
       targetDistance = w  / 2; // target 7/8 screen width from left
       targetBeginning = h / 8; // distance from top 1/8 screen height
       targetEnd = h * 5 / 32; 
-      initialTargetVelocity = h/5; // initial target speed 
+      initialTargetVelocity = 2 * h/1; // initial target speed 
       andgleDiapason = 6;
       target.start = new Point(targetDistance, targetBeginning);
       target.end = new Point(targetDistance, targetEnd);
@@ -130,7 +130,7 @@ public class CannonView extends SurfaceView
  
       Random rand = new Random();
       
-      randomNumberAngle = rand.nextInt(360);
+      mainAngle = rand.nextInt(360);
       
 
       timeLeft = 10; 
@@ -153,17 +153,29 @@ public class CannonView extends SurfaceView
       double interval = elapsedTimeMS / 1000.0; // convert to seconds
       
       Random randSmallAngle = new Random();
-      int randomNumberSmallAnglePositive = randSmallAngle.nextInt(andgleDiapason);
-      int randomNumberSmallAngleNegative = randomNumberSmallAnglePositive -  (andgleDiapason / 2);
       
-  	  double multiplierX = Math.sin(randomNumberAngle + randomNumberSmallAngleNegative);
-  	  double multiplierY = Math.cos(randomNumberAngle + randomNumberSmallAngleNegative);
+      int randomNumberSmallAnglePositive = randSmallAngle.nextInt(andgleDiapason);
+      int randomNumberSmallAngleBiPolar = randomNumberSmallAnglePositive -  (andgleDiapason / 2);
+      
+      mainAngle = mainAngle + randomNumberSmallAngleBiPolar;
+      
+  	  double multiplierX = Math.sin(mainAngle);
+  	  double multiplierY = Math.cos(mainAngle);
+  	  
+  	  
   	  
       targetVelocityX = initialTargetVelocity * multiplierX;
       targetVelocityY = initialTargetVelocity * multiplierY; 
       
-      if (target.start.y < 0.00 || target.end.y > screenHeight){
-    	  targetVelocityY *= -1;
+      if (target.start.y < 0.00 || target.end.y > screenHeight || target.end.y < 0.00 || target.start.y > screenHeight  ){
+    	  mainAngle = mainAngle - 180;
+    	  if(mainAngle < 0){
+    		  mainAngle = mainAngle + 360;
+    	  }
+    	  if(mainAngle > 360){
+    		  mainAngle = mainAngle - 360;
+    	  }
+    	  //targetVelocityY *= -1;
     	  numberOfReflections += 1;
       }
       double targetUpdateY = interval * targetVelocityY;
@@ -171,11 +183,20 @@ public class CannonView extends SurfaceView
 
       
       if (target.start.x < 0.00 || target.end.x > screenWidth){
-    	  targetVelocityX *= -1;   
-    	  numberOfReflections += 1;
+    	  mainAngle = mainAngle - 180;    	  
+    	  if(mainAngle < 0){
+    		  mainAngle = mainAngle + 360;
+    	  }
+    	  if(mainAngle > 360){
+    		  mainAngle = mainAngle - 360;
+    	  }
+    	  //targetVelocityY *= -1;
+    	  
+    	 // targetVelocityX *= -1;   
+    	  //numberOfReflections += 1;
       }   
  
-       double targetUpdateX = interval * targetVelocityX;     
+      double targetUpdateX = interval * targetVelocityX;     
 
       
       
