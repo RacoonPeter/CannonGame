@@ -39,7 +39,7 @@ public class CannonView extends SurfaceView
    private double totalElapsedTime; // the number of seconds elapsed
    private Line target; // start and end points of the target
    private int targetDistance; // target distance from left
-   private int andgleDiapason = 10; // target distance from left
+   private int andgleDiapason; // target distance from left
    int randomNumberAngle;//// start target angle of the new game
    private int targetBeginning; // target distance from top
    private int targetEnd; // target bottom's distance from top
@@ -103,7 +103,8 @@ public class CannonView extends SurfaceView
       targetDistance = w  / 2; // target 7/8 screen width from left
       targetBeginning = h / 8; // distance from top 1/8 screen height
       targetEnd = h * 5 / 32; 
-      initialTargetVelocity = h/2; // initial target speed 
+      initialTargetVelocity = h/5; // initial target speed 
+      andgleDiapason = 6;
       target.start = new Point(targetDistance, targetBeginning);
       target.end = new Point(targetDistance, targetEnd);
       textPaint.setTextSize(w / 20); // text size 1/20 of screen width
@@ -159,25 +160,36 @@ public class CannonView extends SurfaceView
   	  double multiplierY = Math.cos(randomNumberAngle + randomNumberSmallAngleNegative);
   	  
       targetVelocityX = initialTargetVelocity * multiplierX;
-      targetVelocityY = initialTargetVelocity * multiplierY;     
+      targetVelocityY = initialTargetVelocity * multiplierY; 
       
-      double targetUpdateX = interval * targetVelocityX;
+      if (target.start.y < 0.00 || target.end.y > screenHeight){
+    	  targetVelocityY *= -1;
+    	  numberOfReflections += 1;
+      }
       double targetUpdateY = interval * targetVelocityY;
+      
+
+      
+      if (target.start.x < 0.00 || target.end.x > screenWidth){
+    	  targetVelocityX *= -1;   
+    	  numberOfReflections += 1;
+      }   
+ 
+       double targetUpdateX = interval * targetVelocityX;     
+
       
       
       
       target.start.x += targetUpdateX;
       target.start.y += targetUpdateY;
+      
+      
       target.end.x += targetUpdateX;
       target.end.y += targetUpdateY;
-      if (target.start.y < 0.00 || target.end.y > screenHeight){
-    	  targetVelocityY *= -1;
-    	  numberOfReflections += 1;
-      }
-      if (target.start.x < 0.00 || target.end.x > screenWidth){
-    	  targetVelocityX *= -1;   
-    	  numberOfReflections += 1;
-      }   
+      
+      
+      
+      
 
       timeLeft -= interval; // subtract from time left
       if (timeLeft <= 0.0 || numberOfReflections >= 100000)
