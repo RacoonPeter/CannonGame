@@ -126,20 +126,12 @@ public class CannonView extends SurfaceView
       backgroundPaint.setColor(Color.GRAY); 
 	   
 	  numberOfReflections = 0;
-      // set every element of hitStates to false--restores target pieces
  
       Random rand = new Random();
       
       randomNumberAngle = rand.nextInt(360);
       
-  	  /*
-  	  double multiplierX = Math.sin(randomNumberAngle);
-  	  double multiplierY = Math.cos(randomNumberAngle);
-  	  
-      targetVelocityX = initialTargetVelocity * multiplierX;
-      targetVelocityY = initialTargetVelocity * multiplierY;
-      */
- 
+
       timeLeft = 10; 
       shotsFired = 0; // set the initial number of shots fired
       totalElapsedTime = 0.0; // set the time elapsed to zero
