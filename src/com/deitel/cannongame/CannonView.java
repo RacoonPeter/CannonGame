@@ -103,8 +103,8 @@ public class CannonView extends SurfaceView
       targetDistance = w  / 2; // target 7/8 screen width from left
       targetBeginning = h / 8; // distance from top 1/8 screen height
       targetEnd = h * 5 / 32; 
-      initialTargetVelocity = 2 * h/1; // initial target speed 
-      andgleDiapason = 6;
+      initialTargetVelocity = 2 * h/2; // initial target speed 
+      andgleDiapason = 16;
       target.start = new Point(targetDistance, targetBeginning);
       target.end = new Point(targetDistance, targetEnd);
       textPaint.setTextSize(w / 20); // text size 1/20 of screen width
@@ -133,7 +133,7 @@ public class CannonView extends SurfaceView
       mainAngle = rand.nextInt(360);
       
 
-      timeLeft = 10; 
+      timeLeft = 100000; 
       shotsFired = 0; // set the initial number of shots fired
       totalElapsedTime = 0.0; // set the time elapsed to zero
       
@@ -154,10 +154,10 @@ public class CannonView extends SurfaceView
       
       Random randSmallAngle = new Random();
       
-      int randomNumberSmallAnglePositive = randSmallAngle.nextInt(andgleDiapason);
-      int randomNumberSmallAngleBiPolar = randomNumberSmallAnglePositive -  (andgleDiapason / 2);
+      int randomNumberSmallAnglePositive = randSmallAngle.nextInt(andgleDiapason);////  from 0 to angDiap
+      int randomNumberSmallAngleBiPolar = randomNumberSmallAnglePositive -  (andgleDiapason / 2); //from - angDiap   to + angDiap
       
-      mainAngle = mainAngle + randomNumberSmallAngleBiPolar;
+      mainAngle = mainAngle + randomNumberSmallAngleBiPolar;////  random deviate from main angle 
       
   	  double multiplierX = Math.sin(mainAngle);
   	  double multiplierY = Math.cos(mainAngle);
@@ -167,36 +167,50 @@ public class CannonView extends SurfaceView
       targetVelocityX = initialTargetVelocity * multiplierX;
       targetVelocityY = initialTargetVelocity * multiplierY; 
       
-      if (target.start.y < 0.00 || target.end.y > screenHeight || target.end.y < 0.00 || target.start.y > screenHeight  ){
+      double targetUpdateX = interval * targetVelocityX;
+      double targetUpdateY = interval * targetVelocityY; 
+      
+      double targetStartX = target.start.x + targetUpdateX;
+      double targetStartY = target.start.y + targetUpdateY;
+      
+      double targetEndX = target.end.x + targetUpdateX;
+      double targetEndY = target.end.y + targetUpdateY;
+
+      
+      //target.start.x += targetUpdateX;
+      //target.start.y += targetUpdateY;
+      
+      
+      //target.end.x += targetUpdateX;
+      //target.end.y += targetUpdateY;
+      
+      if (targetStartY < 0.00 || targetEndY > screenHeight || targetEndY < 0.00 || targetStartY > screenHeight  ){
     	  mainAngle = mainAngle - 180;
     	  if(mainAngle < 0){
     		  mainAngle = mainAngle + 360;
     	  }
-    	  if(mainAngle > 360){
-    		  mainAngle = mainAngle - 360;
-    	  }
     	  //targetVelocityY *= -1;
     	  numberOfReflections += 1;
       }
-      double targetUpdateY = interval * targetVelocityY;
+      multiplierY = Math.cos(mainAngle);
+      targetVelocityY = initialTargetVelocity * multiplierY; 
+      targetUpdateY = interval * targetVelocityY;
       
 
       
-      if (target.start.x < 0.00 || target.end.x > screenWidth){
+      if (targetStartX < 0.00 || targetEndX > screenWidth){
     	  mainAngle = mainAngle - 180;    	  
     	  if(mainAngle < 0){
     		  mainAngle = mainAngle + 360;
-    	  }
-    	  if(mainAngle > 360){
-    		  mainAngle = mainAngle - 360;
     	  }
     	  //targetVelocityY *= -1;
     	  
     	 // targetVelocityX *= -1;   
     	  //numberOfReflections += 1;
       }   
- 
-      double targetUpdateX = interval * targetVelocityX;     
+      multiplierX = Math.sin(mainAngle);
+      targetVelocityX = initialTargetVelocity * multiplierX;  
+      targetUpdateX = interval * targetVelocityX;     
 
       
       
